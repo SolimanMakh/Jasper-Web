@@ -1,0 +1,30 @@
+.main
+{
+  display: flex;
+}
+
+.left
+{
+width: 10%;
+
+}
+
+.middle
+{
+  width: 70%;
+  background-color: rgb(240, 240, 240);
+  height: 50rem;
+  padding: 1rem;
+}
+
+
+.last
+{
+  width: 20%;
+  padding: 1rem;
+}
+
+canvas{
+  background-color: white;
+;
+}
