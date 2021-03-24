@@ -2,6 +2,7 @@ export class Band
 {
   name: String;
   rect : fabric.Rect
+  expandCircle: fabric.Circle
   height: number;
   y: number;
 
