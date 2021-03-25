@@ -28,3 +28,28 @@ canvas{
   background-color: white;
 ;
 }
+
+h4
+{
+  margin: 0.8rem 0;
+}
+.side-palette
+{
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2);
+
+  padding: 0.8rem;
+  padding-top: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.dragable-item
+{
+  padding: 0.6rem;
+  width: 40%;
+}
+.dragable-item:hover
+{
+  background-color: rgba(245, 245, 245, 0.7);
+}

@@ -1,7 +1,10 @@
 import { Parser } from '@angular/compiler/src/ml_parser/parser';
-import { Component, ElementRef, HostListener, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, Renderer2, ViewChild } from '@angular/core';
 import {fabric} from "fabric"
+import { faFont,faTextWidth, faImage, faStickyNote, faDrawPolygon, faEllipsisV, faChartArea, faChartPie} from '@fortawesome/free-solid-svg-icons';
+
 import {Band} from "./band.model"
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +19,10 @@ export class AppComponent {
   xmlObj : XMLDocument;
   bands : Band[] = []
   bandChosen;
+  faIcons = [faFont,faTextWidth,faImage,faStickyNote,faChartPie ,faEllipsisV]
+
+  paletteTempElement;
+  draggedElementInCanvas;
 
 @HostListener('window:keydown', ['$event'])
 onClick(e) {
@@ -32,7 +39,7 @@ onClick(e) {
   canvasFabricRef: fabric.Canvas
   rect: fabric.Rect
 
-  constructor(private renderer : Renderer2)
+  constructor(private renderer : Renderer2, @Inject(DOCUMENT) document)
   {
 
   }
@@ -115,7 +122,54 @@ onClick(e) {
 
       this.canvasFabricRef.add(this.bands[i].rect);
       var that = this
+      this.bands[i].rect.on('dragover',function (e)
+      {
+          this.set({stroke: 'aqua'})
+          that.canvasFabricRef.requestRenderAll()
+      })
 
+      this.bands[i].rect.on('dragleave',function (e)
+      {
+          this.set({stroke: 'blue'})
+          that.canvasFabricRef.requestRenderAll()
+      })
+
+
+      this.bands[i].rect.on('drop',function (e){
+
+        var event = <DragEvent>e.e
+
+        var rectangleDraggedOver
+
+        for (var j = 0 ; j < that.bands.length; j++)
+        {
+          if(that.bands[j].rect === this)
+            {
+              rectangleDraggedOver = j
+            }
+
+        }
+
+        if(that.paletteTempElement) {
+        const text = new fabric.Text("Static!!!", {fontSize:20, left:event.offsetX,top:event.offsetY})
+        that.bands[rectangleDraggedOver].fields.push(text)
+
+        that.canvasFabricRef.add(text);
+        this.set({stroke: 'blue'})
+
+
+
+        that.paletteTempElement = undefined;
+
+      }else if(that.draggedElementInCanvas)
+      {
+
+
+        console.log('sadh')
+
+      }
+
+      })
 
       this.bands[i].rect.on('selected',function (evt)
       {
@@ -141,10 +195,10 @@ onClick(e) {
 
 
         // Adding Expand Circle
-        that.bands[that.bandChosen ].expandCircle = new fabric.Circle({radius:5, left:this.get('left') + 399, top:this.get('top')+this.get('height')-5, fill:'transparent',stroke:'black'})
-        that.bands[that.bandChosen ].expandCircle.lockMovementX = true ;
-        that.bands[that.bandChosen ].expandCircle.hasControls = false;
-        that.bands[that.bandChosen ].expandCircle.hasBorders = false;
+        that.bands[that.bandChosen].expandCircle = new fabric.Circle({radius:5, left:this.get('left') + 399, top:this.get('top')+this.get('height')-5, fill:'transparent',stroke:'black'})
+        that.bands[that.bandChosen].expandCircle.lockMovementX = true ;
+        that.bands[that.bandChosen].expandCircle.hasControls = false;
+        that.bands[that.bandChosen].expandCircle.hasBorders = false;
 
 
 
@@ -175,14 +229,8 @@ onClick(e) {
 
 
 //Adding Test Text
-    const text = new fabric.Text("Static!!!", {fontSize:20, left:350,top:30})
 
-      this.canvasFabricRef.add(text);
-      text.on('mouseup',evt =>
-      {
-        console.log(evt.transform.width)
-      }
-      )
+
 
 
 
@@ -459,6 +507,15 @@ for (var i = this.bandChosen + 2 ; i < this.bands.length; i++)
 
 
 }
+
+
+onDrag(e,f)
+{
+  console.log(f);
+  this.paletteTempElement = f ;
+  e.dataTransfer.setData('key', "StaticText");
+}
+
 
 
 

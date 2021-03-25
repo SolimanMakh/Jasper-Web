@@ -3,8 +3,10 @@ export class Band
   name: String;
   rect : fabric.Rect
   expandCircle: fabric.Circle
+  fields : any[] = [];
   height: number;
   y: number;
+
 
 
 

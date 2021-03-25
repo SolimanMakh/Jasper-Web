@@ -2,19 +2,29 @@
 
 <div class="main">
   <div class="left">
+    <button style="margin-bottom: 1rem;background-color: cornflowerblue; border-radius: 12px; border: none; color: white; padding: 1rem;" (click)= "addBand()">Add</button>
+
+    <button style="margin-bottom: 1rem;background-color: cornflowerblue; border-radius: 12px; border: none; color: white; padding: 1rem; margin-right: 0.3rem" (click)= "deleteBand()">Delete</button>
 
   </div>
 
   <div class="middle">
-    <button style="margin-bottom: 1rem;background-color: cornflowerblue; border-radius: 12px; border: none; color: white; padding: 1rem; margin-right: 0.3rem" (click)= "deleteBand()">Delete</button>
-    <button style="margin-bottom: 1rem;background-color: cornflowerblue; border-radius: 12px; border: none; color: white; padding: 1rem;" (click)= "addBand()">Add</button>
 
-    <canvas width="800px" height="800px" id="canvas" #canvas></canvas>
+    <div style="width: 800px;"><canvas  width="800px" height="800px" id="canvas" #canvas></canvas></div>
 
   </div>
 
   <div class="last">
-        <div>Palatte</div>
+        <div class="side-palette">
+          <h4>Palette</h4>
+          <div id="StaticText"  (dragstart) = "onDrag($event,f)" #f  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[0]"></fa-icon> Static text</span></div>
+          <div  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[1]"></fa-icon> Text Area</span></div>
+          <div  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[2]"></fa-icon> Image</span></div>
+          <div id="StaticText"  (dragstart) = "onDrag($event,f)" #f  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[3]"></fa-icon> Note</span></div>
+          <div  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[4]"></fa-icon> Chart</span></div>
+          <div  class="dragable-item"> <span draggable="true"> <fa-icon [icon]="faIcons[5]"></fa-icon> Ellipse</span></div>
+
+        </div>
         <div>Properties</div>
   </div>
 
