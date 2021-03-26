@@ -1,7 +1,7 @@
 import { Parser } from '@angular/compiler/src/ml_parser/parser';
 import { Component, ElementRef, HostListener, Inject, Renderer2, ViewChild, ɵɵpureFunction4 } from '@angular/core';
 import {fabric} from "fabric"
-import { faFont,faTextWidth, faImage, faStickyNote, faDrawPolygon, faEllipsisV, faChartArea, faChartPie} from '@fortawesome/free-solid-svg-icons';
+import { faFont,faTextWidth, faImage, faStickyNote, faDrawPolygon, faEllipsisV, faChartArea, faChartPie, faTheaterMasks} from '@fortawesome/free-solid-svg-icons';
 
 import {Band} from "./band.model"
 import { DOCUMENT } from '@angular/common';
@@ -40,7 +40,7 @@ onClick(e) {
   canvasFabricRef: fabric.Canvas
   rect: fabric.Rect
 
-  constructor(private renderer : Renderer2, @Inject(DOCUMENT) document)
+  constructor(private renderer : Renderer2)
   {
 
   }
@@ -68,11 +68,14 @@ onClick(e) {
       this.bands[i] = new Band("Test",100,40 + 100*i)
     }
 
+
+
+
     }
 
     ngAfterViewInit()
     {
-
+      var that = this;
     // this.CanvasContext = this.renderer.selectRootElement(this.canvas).nativeElement.getContext('2d');
 
     //this.CanvasContext.fillStyle = "red"
@@ -85,7 +88,7 @@ onClick(e) {
     //Adding Vertical Lines
     var line1 = new fabric.Line([ 20, 0, 20, 800 ], {
 
-      stroke: 'blue',
+      stroke: '#009dff',
       strokeWidth: 1,
       selectable: false,
       evented: false,
@@ -93,7 +96,7 @@ onClick(e) {
 
     var line2 = new fabric.Line([ 780, 0, 780, 800 ], {
 
-      stroke: 'blue',
+      stroke: '#009dff',
       strokeWidth: 1,
       selectable: false,
       evented: false,
@@ -167,6 +170,11 @@ Expand(diff = 0)
       {
 
         this.bands[i].rect.set({top:this.bands[i].rect.get('top')+diff})
+        this.bands[i].fields.forEach(field =>
+        {
+          field.set({top: field.get('top') + diff})
+          field.setCoords();
+    })
         this.bands[i].y = this.bands[i].rect.get('top')
 
         this.bands[i].rect.setCoords();
@@ -273,7 +281,7 @@ else
 addingBOI( index2:number)
 {
 
-  this.bands[index2].rect =  new fabric.Rect({left: -5, top: this.bands[index2].y , stroke: "blue" ,fill:"transparent" ,width:806,height:100, strokeWidth:1 });
+  this.bands[index2].rect =  new fabric.Rect({left: -5, top: this.bands[index2].y , stroke: "#009dff" ,fill:"transparent" ,width:806,height:100, strokeWidth:1 });
   this.bands[index2].rect.lockMovementX = true;
   this.bands[index2].rect.lockMovementY = true;
   this.bands[index2].rect.hasControls = false;
@@ -298,7 +306,7 @@ addingBOI( index2:number)
 
    this.bands[index2].rect.on('dragleave',function (e)
    {
-       this.set({stroke: 'blue'})
+       this.set({stroke: '#009dff'})
        that.canvasFabricRef.requestRenderAll()
    })
 
@@ -337,7 +345,7 @@ addingBOI( index2:number)
           && text.get('left') + text.get('width') < that.bands[i].rect.get('left') +  that.bands[i].rect.get('width')
           )
           {
-           that.bands.forEach((band) => { band.rect.set({stroke:'blue'}) })
+           that.bands.forEach((band) => { band.rect.set({stroke:'#009dff'}) })
 
            that.bands[i].rect.set({stroke: "aqua"});
            that.draggedtoBandInCanvas =  that.bands[i]
@@ -345,6 +353,12 @@ addingBOI( index2:number)
           }
        }
      })
+
+
+     text.on('mousedblclick', function (e)
+     {
+       console.log("Double Clicked")
+     } )
 
      //Droping
      text.on('moved', function (e)
@@ -359,8 +373,12 @@ addingBOI( index2:number)
          }
        })
 
-       that.bands.forEach((band) => { band.rect.set({stroke:'blue'}) })
+       that.bands.forEach((band) => { band.rect.set({stroke:'#009dff'}) })
        that.draggedtoBandInCanvas.fields.push(text);
+       that.canvasFabricRef.remove(text)
+       that.canvasFabricRef.add(text)
+
+
        console.log(that.draggedtoBandInCanvas)
        console.log(e);
      })
@@ -376,7 +394,7 @@ addingBOI( index2:number)
 
 
      that.canvasFabricRef.add(text);
-     this.set({stroke: 'blue'})
+     this.set({stroke: '#009dff'})
 
 
 
@@ -399,7 +417,7 @@ addingBOI( index2:number)
     for (var j = 0 ; j < that.bands.length; j++)
     {
 
-      that.bands[j].rect.set({stroke:"blue"})
+      that.bands[j].rect.set({stroke:"#009dff"})
       that.canvasFabricRef.remove(that.bands[j].expandCircle)
       that.bands[j].expandCircle = null;
 
@@ -425,7 +443,7 @@ addingBOI( index2:number)
 
     that.canvasFabricRef.add(that.bands[that.bandChosen ].expandCircle)
     that.bands[that.bandChosen ].expandCircle.on('selected',function() {
-    this.set({stroke: 'blue'})
+    this.set({stroke: '#009dff'})
 
     })
     var lastValue = that.bands[that.bandChosen ].expandCircle.top ;
@@ -454,6 +472,7 @@ onDrag(e,f)
   console.log(f);
   this.paletteTempElement = f ;
 }
+
 
 
 }
